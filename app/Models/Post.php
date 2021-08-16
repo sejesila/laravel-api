@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static findOrFail(int $id)
  * @method static paginate(int $int)
+ * @method static where(string $string, $request)
  * @property mixed title
  * @property mixed body
  */

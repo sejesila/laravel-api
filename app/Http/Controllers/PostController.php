@@ -5,36 +5,21 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index(): Response
+    public function index()
     {
         $posts = Post::paginate(5);
         return PostResource::collection($posts);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @param Request $request
+     * @return PostResource
      */
     public function store(Request $request)
     {
@@ -42,7 +27,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->body = $request->body;
 
-        if ($post->save()){
+        if ($post->save()) {
             return new PostResource($post);
         }
     }
@@ -50,7 +35,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return PostResource
      */
     public function show($id)
@@ -61,21 +46,10 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int $id
      * @return PostResource
      */
     public function update(Request $request, $id)
@@ -84,7 +58,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->body = $request->body;
 
-        if ($post->save()){
+        if ($post->save()) {
             return new PostResource($post);
         }
     }
@@ -93,13 +67,18 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return Response
+     * @return PostResource
      */
     public function destroy(int $id)
     {
         $post = Post::findOrFail($id);
-        if ($post->delete()){
+        if ($post->delete()) {
             return new PostResource($post);
         }
+    }
+
+    public function searchApi($request)
+    {
+        return Post::where('title', $request)->get();
     }
 }
